@@ -70,4 +70,7 @@
 + (void) logout;
 + (void) save;
 
++ (bool) registerWithAuthenticationProvider:(NSString *)authProvider credential:(NSString *)credential callbackTarget:(id<AuthenticationDelegate>)target method:(SEL)selector;
++ (AuthenticationRequest *)newRegisterRequestWithAuthenticationProvider:(NSString *)authProvider Credential:(NSString *)credential;
+
 @end
