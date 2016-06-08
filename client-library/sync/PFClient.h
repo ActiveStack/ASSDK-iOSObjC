@@ -10,6 +10,7 @@
 #import "PFModelObject.h"
 #import "IUserAnchor.h"
 #import "Reachability.h"
+#import "AuthenticationRequest.h"
 
 @class PFSocketManager;
 @class PushCWUpdateRequest;

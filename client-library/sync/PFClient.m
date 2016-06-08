@@ -563,31 +563,35 @@ if ([result isMemberOfClass:[AuthenticationResponse class]]) {
 - (void)setUnReachableBlock:(NetworkUnreachable)unReachableBlock{
     self.reach.unreachableBlock = unReachableBlock;
 }
-
 #pragma mark - Registration Methods
+
+
+
 /** Nitesh
  * Service method to allow the client application to user Registration request using a
  * custom authentication provider
  */
-+ (bool) registerWithAuthenticationProvider:(NSString *)authProvider credential:(NSString *)credential callbackTarget:(id<AuthenticationDelegate>)target method:(SEL)selector {
+
+
+
++(bool) registerWithAuthenticationProvider:(NSString *)authProvider credential:(NSString *)credential callbackTarget:(id<AuthenticationDelegate>)target method:(SEL)selector {
     [PFClient sharedInstance].authDelegate = target;
     [[PFClient sharedInstance] startLoginTimeoutTimer];
-    
     AuthenticationRequest *req;
     req = [self newRegisterRequestWithAuthenticationProvider:authProvider Credential:credential];
     
     PFInvocation* callback = [[PFInvocation alloc] initWithTarget:[PFClient sharedInstance] method:@selector(receivedRegisterUsernamePasswordResponse:)];
-    
     [[PFSocketManager sharedInstance] sendEvent:@"register" data:req callback:callback];
-    
     return true;
 }
-
-
 /**
  * Service method to make it easier for the client application to issue a registration request
  */
-+ (AuthenticationRequest *)newRegisterRequestWithAuthenticationProvider:(NSString *)authProvider Credential:(NSString *)credential {
+
+
+
++(AuthenticationRequest *)newRegisterRequestWithAuthenticationProvider:(NSString *)authProvider Credential:(NSString *)credential {
+    
     AuthenticationRequest* req = [[AuthenticationRequest alloc] init];
     req.authProvider = authProvider;
     req.deviceId = [[NSUUID UUID] UUIDString];
@@ -596,18 +600,19 @@ if ([result isMemberOfClass:[AuthenticationResponse class]]) {
 }
 
 /**
- * Callback method for when the registration response is recieved
+  * Callback method for when the registration response is recieved
  */
+
+
+
 - (void) receivedRegisterUsernamePasswordResponse:(id) result{
     NSLog(@"PFClient Got auth response");
-    
     if ([result isMemberOfClass:[AuthenticationResponse class]]) {
         AuthenticationResponse* response = (AuthenticationResponse*) result;
         UserToken* userToken = response.result;
         clientId = response.clientId;
         self.userId = userToken.user.ID;
         self.token = userToken.token;
-        
         if (self.token.length > 0 && self.userId.length > 0 && [[(AuthenticationResponse *)result statusCode] integerValue] == 200) {
             [PFClient save];
             return;
@@ -620,10 +625,11 @@ if ([result isMemberOfClass:[AuthenticationResponse class]]) {
             return;
         }
     }
-    
     [loginTimeOutTimer invalidate];
     NSError *error = [NSError errorWithDomain:@"com.activestack.error" code:0 userInfo:@{NSLocalizedDescriptionKey: @"Server did not return a token."}];
     [self.authDelegate authenticationDidFailWithError:error];
+    
+    
 }
 
 @end
